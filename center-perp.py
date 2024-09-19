@@ -1,9 +1,17 @@
 """
 ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈
 ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈
+
 NOTE
 
-Ang kulang na lang ay yung pagkuha ng road width ranges per interval.
+This Python script generates perpendicular lines from existing line geometries in a GeoDataFrame using geopandas and pygeoops. 
+It calculates the lengths of these lines and allows for the exploration of geometric relationships within spatial data. 
+By creating a series of perpendicular lines at specified intervals, the script facilitates deeper analysis of line features in 
+geographic datasets. The generated lines can be particularly useful for applications in urban planning, transportation analysis, 
+and environmental studies. Finally, the script saves both the original lines and the newly created perpendicular lines as shapefiles, 
+making the results easily accessible for further use and visualization in GIS software.
+
+
 ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈
 ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈
 """
@@ -14,7 +22,7 @@ from shapely.geometry import LineString, MultiLineString
 import numpy as np
 
 #Create perpendicular lines
-def create_perpendicular_lines(gdf_lines, distance=10, interval=20):
+def create_perpendicular_lines(gdf_lines, distance=5, interval=10):
     """Create a series of perpendicular lines at specified intervals from each line feature in a GeoDataFrame."""
     new_geometries = []
 
@@ -99,12 +107,11 @@ def remove_intersecting_lines(gdf):
 # Main Execution
 if __name__ == "__main__":
     # Load the polygon shapefile
-    gdf_polygons = gpd.read_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\For test (simplified)\smoothed_BSG-115-20240601-230805-244346461.shp")
+    gdf_polygons = gpd.read_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\Reprojected\smoothed_BSG-115-20240601-230805-244346461.shp")
 
     # Creates and saves the centerline of the polygon
     gdf_lines = pygeoops.centerline(gdf_polygons.geometry, densify_distance=0.1, simplifytolerance=0.01)
     gdf_lines = gpd.GeoDataFrame(geometry=gdf_lines, crs=gdf_polygons.crs)
-#    gdf_lines.to_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\For test (simplified)\cl-smoothed_BSG-115-20240601-230805-244346461.shp")
 
     # Create perpendicular lines
     perp_lines = create_perpendicular_lines(gdf_lines)
@@ -125,4 +132,6 @@ if __name__ == "__main__":
 
     perp_gdf['id'] = range(len(perp_gdf))
     perp_gdf['width'] = perp_gdf.geometry.length
-    perp_gdf.to_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\For test (simplified)\perp-smoothed_BSG-115-20240601-230805-244346461.shp")
+    
+    gdf_lines.to_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\Reprojected\smoothed_BSG-115-20240601-230805-244346461-cl.shp")
+    perp_gdf.to_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\Transformed\Reprojected\smoothed_BSG-115-20240601-230805-244346461-perp.shp")
