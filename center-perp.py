@@ -21,7 +21,7 @@ from shapely.geometry import LineString, MultiLineString
 import numpy as np
 
 #Create perpendicular lines
-def create_perpendicular_lines(gdf_lines, distance=5, interval=10):
+def create_perpendicular_lines(gdf_lines, distance=10, interval=10):
     """Create a series of perpendicular lines at specified intervals from each line feature in a GeoDataFrame."""
     new_geometries = []
 
