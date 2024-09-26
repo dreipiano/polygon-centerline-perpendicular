@@ -1,6 +1,6 @@
 import geopandas as gpd
 import os
-import center_perp as cp
+import centerperp as cp
 import reproject
 
 def check_file_type(file_path):
