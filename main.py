@@ -18,7 +18,7 @@ for easy access and further use in GIS applications.
 import geopandas as gpd
 import os
 import centerperp as cp
-import reproject_alt
+import reproject
 import dissolve
 import line_simplify
 
@@ -42,7 +42,7 @@ def main():
     dissolved_poly = dissolve.dissolve_poly(gdf_poly)
     
     # Reproject
-    reprojected_poly = reproject_alt.reproject_crs(dissolved_poly)
+    reprojected_poly = reproject.reproject_crs(dissolved_poly)
     
     #Smoothing/Simplify
     simplify_poly = line_simplify.smoothen(reprojected_poly)
