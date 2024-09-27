@@ -2,11 +2,8 @@ import geopandas as gpd
 
 def reproject_crs(input_file, target_epsg=32651):
     # try:
-        # Read the shapefile
-        gdf = gpd.read_file(input_file)
-        gdf = gdf.to_crs(epsg=target_epsg)
-        
-        return gdf
+        # Returns reprojected shapefile   
+        return input_file.to_crs(epsg=target_epsg)
 
 # gdf = reproject_crs(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\undissolved\BSG-113-20240823-004447-268994436.shp")
 # gdf.to_file(r"C:\Users\user-307E123400\OneDrive - Philippine Space Agency\FMR\Delineations & Centerlines\undissolved\4326.shp")
