@@ -6,20 +6,20 @@ import numpy as np
 """
 Dissolve
 """
-def dissolve(input_file):
+def dissolve(gdf):
     """
     Description
     
     Parameters:
         input_file: 
     """
-    return input_file.dissolve()
+    return gdf.dissolve()
 
 """
 Reproject
 """
-def reproject(input_file, target_epsg=32651):
-    return input_file.to_crs(epsg=target_epsg)
+def reproject(gdf, target_epsg=32651):
+    return gdf.to_crs(epsg=target_epsg)
 
 """
 Simplify Poly
@@ -37,10 +37,10 @@ def smoothen(gdf, buffer_distance=5, simplify_tolerance=1, resolution=40):
 """
 Create Centerline
 """
-def create_centerline(gdf_polygon, dense = 0.1, tole = 0.01):
+def create_centerline(gdf, dense = 0.1, tole = 0.01):
     """Creates the centerline of the polygon."""
-    gdf_lines = pygeoops.centerline(gdf_polygon.geometry, densify_distance=dense, simplifytolerance=tole)
-    gdf_lines = gpd.GeoDataFrame(geometry=gdf_lines, crs=gdf_polygon.crs)
+    gdf_lines = pygeoops.centerline(gdf.geometry, densify_distance=dense, simplifytolerance=tole)
+    gdf_lines = gpd.GeoDataFrame(geometry=gdf_lines, crs=gdf.crs)
     
     return gdf_lines
 
