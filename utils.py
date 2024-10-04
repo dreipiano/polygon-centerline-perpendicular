@@ -3,9 +3,6 @@ import pygeoops
 from shapely.geometry import LineString, MultiLineString
 import numpy as np
 
-"""
-Dissolve
-"""
 def dissolve(gdf):
     """
     Description
@@ -15,15 +12,9 @@ def dissolve(gdf):
     """
     return gdf.dissolve()
 
-"""
-Reproject
-"""
 def reproject(gdf, target_epsg=32651):
     return gdf.to_crs(epsg=target_epsg)
 
-"""
-Simplify Poly
-"""
 def smoothen(gdf, buffer_distance=5, simplify_tolerance=1, resolution=40):
     if gdf.empty:
         return gdf
@@ -34,9 +25,6 @@ def smoothen(gdf, buffer_distance=5, simplify_tolerance=1, resolution=40):
         .simplify(simplify_tolerance, preserve_topology=True))
     return smoothed_gdf
 
-"""
-Create Centerline
-"""
 def create_centerline(gdf, dense = 0.1, tole = 0.01):
     """Creates the centerline of the polygon."""
     gdf_lines = pygeoops.centerline(gdf.geometry, densify_distance=dense, simplifytolerance=tole)
@@ -44,9 +32,6 @@ def create_centerline(gdf, dense = 0.1, tole = 0.01):
     
     return gdf_lines
 
-"""
-Create perpendicular lines
-"""
 def create_perp(gdf_polygon, gdf_lines, distance=10, interval=5):
     """Create a series of perpendicular lines at specified intervals from each line feature in a GeoDataFrame."""
     new_perp = []
@@ -106,9 +91,6 @@ def create_perp(gdf_polygon, gdf_lines, distance=10, interval=5):
     
     return new_perp
 
-"""
-Remove intersecting perpendicular lines
-"""
 def remove_intersect(gdf):
     """Remove intersecting lines from the GeoDataFrame."""
     non_intersecting_lines = []
@@ -124,9 +106,6 @@ def remove_intersect(gdf):
     
     return gpd.GeoDataFrame(geometry=non_intersecting_lines, crs=gdf.crs)
 
-"""
-Print widths
-"""
 def print_width(gdf):
     """Print details of each line in the GeoDataFrame."""
     for idx, row in gdf.iterrows():
